@@ -1,22 +1,51 @@
 OK <program>  ->     <vars> <block>
+First:
 OK <block>    ->     start <vars> <stats> stop
+First:
 OK <vars>     ->     empty | var Identifier : Integer <vars>
+First:
+Follow:
 OK <expr>     ->     <A> <exprfactor>
+First:
 OK <exprfactor> -> + <expr> | - <expr> | empty
+First:
+Follow:
 OK <A>        ->     <N> <Afactor>
+First:
 OK <Afactor>  -> - <A> | empty
+First:
+Follow:
 OK <N>        ->     <M> <Nfactor>
+First:
 OK <Nfactor>  -> / <N> | * <N> | empty
+First:
+Follow:
 OK <M>        ->     - <M> |  <R>
+First:
 OK <R>        ->     [ <expr> ] | Identifier | Integer
+First:
 OK <stats>    ->     <stat> ; <mStat>
+First:
 OK <mStat>    ->     empty |  <stat> ;  <mStat>
+First:
+Follow:
 OK <stat>     ->     <in> | <out> | <block> | <if> | <loop> | <assign>
+First:
 OK <in>       ->     in  Identifier
+First:
 OK <out>      ->     out <expr>
+First:
 OK <if>       ->     cond ( ( <expr> <RO> <expr> ) ) <stat>
+First:
 OK <loop>     ->     iterate ( ( <expr> <RO> <expr> ) ) <stat>
+First:
 OK <assign>   ->     Identifier  < <  <expr>
+First:
 OK <RO>       ->     < <ROfactorlt> | > <ROfactorgt> | =
+First:
 OK <ROfactorlt> -> < | > | empty
+First:
+Follow:
 OK <ROfactorgt> -> > | empty
+First:
+Follow:
