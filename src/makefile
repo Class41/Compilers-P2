@@ -5,15 +5,16 @@ main =
 datasourceparserpath = DatasourceParser/
 datastructurespath = DataStructures/
 tokenscannerpath = TokenScanner/
+programparserpath = ProgramParser/
 
-buildpath = $(basepath)$(main)$(compext) $(basepath)$(datasourceparserpath)$(compext) $(basepath)$(datastructurespath)$(compext) $(basepath)$(tokenscannerpath)$(compext)
+buildpath = $(basepath)$(main)$(compext) $(basepath)$(datasourceparserpath)$(compext) $(basepath)$(datastructurespath)$(compext) $(basepath)$(tokenscannerpath)$(compext) $(basepath)$(programparserpath)$(compext)
 
 jarname = frontEnd.jar
 manifestpath = ./MANIFEST.MF
 jarbuilder = jar cfm $(jarname) $(manifestpath)
 buildext = *.class
 
-jarbuildpath = $(basepath)$(main)$(buildext) $(basepath)$(datasourceparserpath)$(buildext) $(basepath)$(datastructurespath)$(buildext) $(basepath)$(tokenscannerpath)$(buildext)
+jarbuildpath = $(basepath)$(main)$(buildext) $(basepath)$(datasourceparserpath)$(buildext) $(basepath)$(datastructurespath)$(buildext) $(basepath)$(tokenscannerpath)$(buildext) $(basepath)$(programparserpath)$(buildext)
 
 all:
 	$(compiler) $(buildpath) && \
