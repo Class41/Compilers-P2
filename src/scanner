@@ -1,0 +1,10 @@
+#!/bin/bash
+
+FILE=./scanner.jar
+
+if test -f "$FILE"; then
+	java -jar $FILE "${@:1}"
+else
+	make
+	java -jar $FILE "${@:1}"
+fi

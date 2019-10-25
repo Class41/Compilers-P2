@@ -1,0 +1,10 @@
+#!/bin/bash
+
+FILE=./P0.jar
+
+if test -f "$FILE"; then
+	java -jar P0.jar "${@:1}"
+else
+	make
+	java -jar P0.jar "${@:1}"
+fi
