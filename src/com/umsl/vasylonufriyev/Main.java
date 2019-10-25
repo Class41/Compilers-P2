@@ -8,9 +8,11 @@ Description: Initial point of the program--contains the main function and comman
 
 package com.umsl.vasylonufriyev;
 
+import com.umsl.vasylonufriyev.DataStructures.Tree;
 import com.umsl.vasylonufriyev.DatasourceParser.ParseCMD;
 import com.umsl.vasylonufriyev.DatasourceParser.ParseFile;
-import com.umsl.vasylonufriyev.TokenScanner.TestScanner;
+import com.umsl.vasylonufriyev.ProgramParser.Parser;
+import com.umsl.vasylonufriyev.TokenScanner.ProgramDataBuffer;
 
 public class Main {
 
@@ -25,7 +27,15 @@ public class Main {
         }
 
         System.out.println("~~ read " + parsedData.length + " lines. ~~");
-        TestScanner ts = new TestScanner(parsedData); //Create the scanner driver
+        Parser parser = new Parser(new ProgramDataBuffer(parsedData));
+
+        try {
+            Tree parseResult = parser.beginParse();
+            System.out.println("SUCCESSFULLY PARSED");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     private static String[] classifyAndParseTokens(String[] cmdArgs) {

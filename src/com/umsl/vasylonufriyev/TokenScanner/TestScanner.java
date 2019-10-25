@@ -8,7 +8,7 @@ Description: Temporarily drives the scanner until the next project
 
 package com.umsl.vasylonufriyev.TokenScanner;
 
-public class TestScanner {
+class TestScanner {
     public TestScanner(String[] parsedData) { //Drives the scanner until EOF
         ProgramDataBuffer t = new ProgramDataBuffer(parsedData); //Data buffer contains filtered file data
         Scanner s = new Scanner(); //My file scanner

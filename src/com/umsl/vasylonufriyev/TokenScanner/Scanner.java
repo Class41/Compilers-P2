@@ -66,7 +66,7 @@ public class Scanner {
             {1000, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24, -24},
     };
 
-    ProgramDataBuffer scannerDriver(ProgramDataBuffer data) throws Exception {
+    public ProgramDataBuffer scannerDriver(ProgramDataBuffer data) throws Exception {
         StringBuilder proccessedData = new StringBuilder(); //Store data we have accumulated so far
         int state = 0; //Current state
         int nextState; //Next state
