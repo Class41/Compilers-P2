@@ -1,22 +1,22 @@
 OK <program>  ->     <vars> <block>
 First:
 First(<vars> <block>) =
-
+----------------------------------------------------------------------
 OK <block>    ->     start <vars> <stats> stop
 First:
 First(start <vars> <stats> stop) =
-
+----------------------------------------------------------------------
 OK <vars>     ->     empty | var Identifier : Integer <vars>
 First:
 First(var Identifier : Integer <vars>) =
 
 Follow:
 Follow(<vars>) =
-
+----------------------------------------------------------------------
 OK <expr>     ->     <A> <exprfactor>
 First:
 First(<A> <exprfactor>) =
-
+----------------------------------------------------------------------
 OK <exprfactor> -> + <expr> | - <expr> | empty
 First:
 First(+ <expr>) =
@@ -24,22 +24,22 @@ First(- <expr>) =
 
 Follow:
 Follow(<exprfactor>) =
-
+----------------------------------------------------------------------
 OK <A>        ->     <N> <Afactor>
 First:
 First(<N> <Afactor>) =
-
+----------------------------------------------------------------------
 OK <Afactor>  -> - <A> | empty
 First:
 First(- <A>) =
 
 Follow:
 Follow(<Afactor>) =
-
+----------------------------------------------------------------------
 OK <N>        ->     <M> <Nfactor>
 First:
 First(<M> <Nfactor>) =
-
+----------------------------------------------------------------------
 OK <Nfactor>  -> / <N> | * <N> | empty
 First:
 First(/ <N>) =
@@ -47,29 +47,29 @@ First(* <N>) =
 
 Follow:
 Follow(<Nfactor>) =
-
+----------------------------------------------------------------------
 OK <M>        ->     - <M> |  <R>
 First:
 First(- <M>) =
 First(<R>) =
-
+----------------------------------------------------------------------
 OK <R>        ->     [ <expr> ] | Identifier | Integer
 First:
 First([ <expr> ]) =
 First(Identifier) =
 First(Integer) =
-
+----------------------------------------------------------------------
 OK <stats>    ->     <stat> ; <mStat>
 First:
 First(<stat> ; <mStat>) =
-
+----------------------------------------------------------------------
 OK <mStat>    ->     empty |  <stat> ;  <mStat>
 First:
 First(<stat> ;  <mStat>) =
 
 Follow:
 Follow(<mStat>) =
-
+----------------------------------------------------------------------
 OK <stat>     ->     <in> | <out> | <block> | <if> | <loop> | <assign>
 First:
 First(<in>) =
@@ -78,33 +78,33 @@ First(<block>) =
 First(<if>) =
 First(<loop>) =
 First(<assign>) =
-
+----------------------------------------------------------------------
 OK <in>       ->     in  Identifier
 First:
 First(in  Identifier) =
-
+----------------------------------------------------------------------
 OK <out>      ->     out <expr>
 First:
 First(out <expr>) =
-
+----------------------------------------------------------------------
 OK <if>       ->     cond ( ( <expr> <RO> <expr> ) ) <stat>
 First:
 First(cond ( ( <expr> <RO> <expr> ) ) <stat>) =
-
+----------------------------------------------------------------------
 OK <loop>     ->     iterate ( ( <expr> <RO> <expr> ) ) <stat>
 First:
 First(iterate ( ( <expr> <RO> <expr> ) ) <stat>) =
-
+----------------------------------------------------------------------
 OK <assign>   ->     Identifier  < <  <expr>
 First:
 First(Identifier  < <  <expr>) =
-
+----------------------------------------------------------------------
 OK <RO>       ->     < <ROfactorlt> | > <ROfactorgt> | =
 First:
 First(< <ROfactorlt>) =
 First(> <ROfactorgt>) =
 First(=) =
-
+----------------------------------------------------------------------
 OK <ROfactorlt> -> < | > | empty
 First:
 First(<) =
@@ -112,10 +112,10 @@ First(>) =
 
 Follow:
 Follow(<ROfactorlt>) =
-
+----------------------------------------------------------------------
 OK <ROfactorgt> -> > | empty
 First:
 First(>) =
 
 Follow:
-Follow(<ROfactorgt>) =
+Follow(<ROfactorgt>) = 
