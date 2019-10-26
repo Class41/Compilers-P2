@@ -13,6 +13,11 @@ First(empty) = { empty }
 
 Follow:
 Follow(<vars>) =
+First(<stats>) + First(<block>) =
+{ start } + First(<stat>) =
+{ in, out, start, cond, iterate, Identifier } =
+{ start, in, out, cond, iterate, Identifier }
+
 ----------------------------------------------------------------------
 OK <expr>     ->     <A> <exprfactor>
 First:
@@ -26,6 +31,11 @@ First(empty) = { empty }
 
 Follow:
 Follow(<exprfactor>) =
+Follow(<expr>) =
+{ ], ) } + First(RO) + Follow(<out>) + Follow(<assign>) =
+{ <, >, = } + Follow(<stat>) =
+{ ; } =
+{ ], ), <, >, =, ; }
 ----------------------------------------------------------------------
 OK <A>        ->     <N> <Afactor>
 First:
@@ -38,6 +48,14 @@ First(empty) = { empty }
 
 Follow:
 Follow(<Afactor>) =
+Follow(<A>) =
+First(<exprfactor>) =
+{ +, - } + Follow(<exprfactor>) =
+Follow(<expr>) =
+{ ], ) } + First(RO) + Follow(<out>) + Follow(<assign>) =
+{ <, >, = } + Follow(<stat>) =
+{ ; } =
+{ +, -, ], ), <, >, =, ; }
 ----------------------------------------------------------------------
 OK <N>        ->     <M> <Nfactor>
 First:
@@ -50,6 +68,18 @@ First(* <N>) = { * }
 First(empty) = { empty }
 Follow:
 Follow(<Nfactor>) =
+Follow(<N>) =
+First(<Afactor>) =
+{ - } + Follow(<Afactor>) =
+Follow(<A>) =
+First(<exprfactor>) =
+{ +, - } + Follow(<exprfactor>) =
+Follow(<expr>) =
+{ ], ) } + First(RO) + Follow(<out>) + Follow(<assign>) =
+{ <, >, = } + Follow(<stat>) =
+{ ; } =
+{ -, +, ], ), <, >, =, ; }
+
 ----------------------------------------------------------------------
 OK <M>        ->     - <M> |  <R>
 First:
@@ -71,7 +101,7 @@ First:
 First(<stat> ;  <mStat>) = First(<stat>) = { in, out, start, cond, iterate, Identifier }
 First(empty) = { empty }
 Follow:
-Follow(<mStat>) =
+Follow(<mStat>) = Follow(<stats>) = { stop }
 ----------------------------------------------------------------------
 OK <stat>     ->     <in> | <out> | <block> | <if> | <loop> | <assign>
 First:
@@ -115,7 +145,7 @@ First(>) = { > }
 First(empty) = { empty }
 
 Follow:
-Follow(<ROfactorlt>) =
+Follow(<ROfactorlt>) = Follow(<RO>) = First(<expr>) = { -, [, Identifier, Integer }
 ----------------------------------------------------------------------
 OK <ROfactorgt> -> > | empty
 First:
@@ -123,4 +153,4 @@ First(>) = { > }
 First(empty) = { empty }
 
 Follow:
-Follow(<ROfactorgt>) = 
+Follow(<ROfactorgt>) = Follow(<RO>) = First(<expr>) = { -, [, Identifier, Integer }
