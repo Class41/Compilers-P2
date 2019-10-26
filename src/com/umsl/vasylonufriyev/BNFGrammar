@@ -1,121 +1,126 @@
 OK <program>  ->     <vars> <block>
 First:
-First(<vars> <block>) =
+First(<vars> <block>) = First(<vars>) = { var, empty }
 ----------------------------------------------------------------------
 OK <block>    ->     start <vars> <stats> stop
 First:
-First(start <vars> <stats> stop) =
+First(start <vars> <stats> stop) = { start }
 ----------------------------------------------------------------------
 OK <vars>     ->     empty | var Identifier : Integer <vars>
 First:
-First(var Identifier : Integer <vars>) =
+First(var Identifier : Integer <vars>) = { var }
+First(empty) = { empty }
 
 Follow:
 Follow(<vars>) =
 ----------------------------------------------------------------------
 OK <expr>     ->     <A> <exprfactor>
 First:
-First(<A> <exprfactor>) =
+First(<A> <exprfactor>) = First(<A>) = { -, [, Identifier, Integer }
 ----------------------------------------------------------------------
 OK <exprfactor> -> + <expr> | - <expr> | empty
 First:
-First(+ <expr>) =
-First(- <expr>) =
+First(+ <expr>) = { + }
+First(- <expr>) = { - }
+First(empty) = { empty }
 
 Follow:
 Follow(<exprfactor>) =
 ----------------------------------------------------------------------
 OK <A>        ->     <N> <Afactor>
 First:
-First(<N> <Afactor>) =
+First(<N> <Afactor>) = First(<N>) = { -, [, Identifier, Integer }
 ----------------------------------------------------------------------
 OK <Afactor>  -> - <A> | empty
 First:
-First(- <A>) =
+First(- <A>) = { - }
+First(empty) = { empty }
 
 Follow:
 Follow(<Afactor>) =
 ----------------------------------------------------------------------
 OK <N>        ->     <M> <Nfactor>
 First:
-First(<M> <Nfactor>) =
+First(<M> <Nfactor>) = First(<M>) = { -, [, Identifier, Integer }
 ----------------------------------------------------------------------
 OK <Nfactor>  -> / <N> | * <N> | empty
 First:
-First(/ <N>) =
-First(* <N>) =
-
+First(/ <N>) = { / }
+First(* <N>) = { * }
+First(empty) = { empty }
 Follow:
 Follow(<Nfactor>) =
 ----------------------------------------------------------------------
 OK <M>        ->     - <M> |  <R>
 First:
-First(- <M>) =
-First(<R>) =
+First(- <M>) = { - }
+First(<R>) = { [, Identifier, Integer }
 ----------------------------------------------------------------------
 OK <R>        ->     [ <expr> ] | Identifier | Integer
 First:
-First([ <expr> ]) =
-First(Identifier) =
-First(Integer) =
+First([ <expr> ]) = { [ }
+First(Identifier) = { Identifier }
+First(Integer) = { Integer }
 ----------------------------------------------------------------------
 OK <stats>    ->     <stat> ; <mStat>
 First:
-First(<stat> ; <mStat>) =
+First(<stat> ; <mStat>) = First(<stat>) = { in, out, start, cond, iterate, Identifier }
 ----------------------------------------------------------------------
 OK <mStat>    ->     empty |  <stat> ;  <mStat>
 First:
-First(<stat> ;  <mStat>) =
-
+First(<stat> ;  <mStat>) = First(<stat>) = { in, out, start, cond, iterate, Identifier }
+First(empty) = { empty }
 Follow:
 Follow(<mStat>) =
 ----------------------------------------------------------------------
 OK <stat>     ->     <in> | <out> | <block> | <if> | <loop> | <assign>
 First:
-First(<in>) =
-First(<out>) =
-First(<block>) =
-First(<if>) =
-First(<loop>) =
-First(<assign>) =
+First(<in>) = { in }
+First(<out>) = { out }
+First(<block>) = { start }
+First(<if>) = { cond }
+First(<loop>) = { iterate }
+First(<assign>) = { Identifier }
 ----------------------------------------------------------------------
 OK <in>       ->     in  Identifier
 First:
-First(in  Identifier) =
+First(in  Identifier) = { in }
 ----------------------------------------------------------------------
 OK <out>      ->     out <expr>
 First:
-First(out <expr>) =
+First(out <expr>) = { out }
 ----------------------------------------------------------------------
 OK <if>       ->     cond ( ( <expr> <RO> <expr> ) ) <stat>
 First:
-First(cond ( ( <expr> <RO> <expr> ) ) <stat>) =
+First(cond ( ( <expr> <RO> <expr> ) ) <stat>) = { cond }
 ----------------------------------------------------------------------
 OK <loop>     ->     iterate ( ( <expr> <RO> <expr> ) ) <stat>
 First:
-First(iterate ( ( <expr> <RO> <expr> ) ) <stat>) =
+First(iterate ( ( <expr> <RO> <expr> ) ) <stat>) = { iterate }
 ----------------------------------------------------------------------
 OK <assign>   ->     Identifier  < <  <expr>
 First:
-First(Identifier  < <  <expr>) =
+First(Identifier  < <  <expr>) = { Identifier }
 ----------------------------------------------------------------------
 OK <RO>       ->     < <ROfactorlt> | > <ROfactorgt> | =
 First:
-First(< <ROfactorlt>) =
-First(> <ROfactorgt>) =
-First(=) =
+First(< <ROfactorlt>) = { < }
+First(> <ROfactorgt>) = { > }
+First(=) = {=}
 ----------------------------------------------------------------------
 OK <ROfactorlt> -> < | > | empty
 First:
-First(<) =
-First(>) =
+First(<) = { < }
+First(>) = { > }
+First(empty) = { empty }
 
 Follow:
 Follow(<ROfactorlt>) =
 ----------------------------------------------------------------------
 OK <ROfactorgt> -> > | empty
 First:
-First(>) =
+First(>) = { > }
+First(empty) = { empty }
 
 Follow:
 Follow(<ROfactorgt>) = 
