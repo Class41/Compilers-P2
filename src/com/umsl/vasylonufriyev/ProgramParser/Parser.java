@@ -97,32 +97,98 @@ public class Parser {
         }
     }
 
-    private void nontermExpr() throws Exception {
-        return;
+    private void nontermExpr() throws Exception { //FLAGGED
+        if (compareToken("MINUS_TK") ||
+                compareToken("SQUAREBRACKETOPEN_TK") ||
+                compareToken("IDENTIFIER_TK") ||
+                compareToken("NUMBER_TK")) {
+            nontermA();
+            nontermExprFactor();
+        } else {
+            throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
+        }
     }
 
-    private void nontermExprFactor() throws Exception {
-        return;
+    private void nontermExprFactor() throws Exception { //FLAGGED
+        if (compareToken("PLUS_TK")) {
+            getNextToken(); //consume +
+            nontermExpr();
+        } else if (compareToken("MINUS_TK")) {
+            getNextToken(); //consume -
+            nontermExpr();
+        }
     }
 
-    private void nontermA() throws Exception {
-        return;
+    private void nontermA() throws Exception { //FLAGGED
+        if (compareToken("MINUS_TK") ||
+                compareToken("SQUAREBRACKETOPEN_TK") ||
+                compareToken("IDENTIFIER_TK") ||
+                compareToken("NUMBER_TK")) {
+            nontermN();
+            nontermAFactor();
+        } else {
+            throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
+        }
     }
 
-    private void nontermN() throws Exception {
-        return;
+    private void nontermAFactor() throws Exception { //FLAGGED
+        if (compareToken("MINUS_TK")) {
+            getNextToken();
+            nontermA();
+        }
     }
 
-    private void nontermNFactor() throws Exception {
-        return;
+    private void nontermN() throws Exception { //FLAGGED
+        if (compareToken("MINUS_TK") ||
+                compareToken("SQUAREBRACKETOPEN_TK") ||
+                compareToken("IDENTIFIER_TK") ||
+                compareToken("NUMBER_TK")) {
+            nontermM();
+            nontermNFactor();
+        } else {
+            throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
+        }
     }
 
-    private void nontermM() throws Exception {
-        return;
+    private void nontermNFactor() throws Exception { //FLAGGED
+        if (compareToken("DIVIDE_TK")) {
+            getNextToken(); //consume /
+            nontermN();
+        } else if (compareToken("MULT_TK")) {
+            getNextToken(); //consume *
+            nontermN();
+        }
     }
 
-    private void nontermR() throws Exception {
-        return;
+    private void nontermM() throws Exception { //FLAGGED
+        if (compareToken("SQUAREBRACKETOPEN_TK") ||
+                compareToken("IDENTIFIER_TK") ||
+                compareToken("NUMBER_TK")) {
+            nontermR();
+        } else if (compareToken("MINUS_TK")) {
+            getNextToken();
+            nontermM();
+        } else {
+            throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
+        }
+    }
+
+    private void nontermR() throws Exception { //FLAGGED
+        if (compareToken("SQUAREBRACKETOPEN_TK")) {
+            getNextToken(); //consume [
+            nontermExpr();
+            if (compareToken("SQUAREBRACKETCLOSE_TK")) {
+                getNextToken(); //consume ]
+            } else {
+                throw exceptionBuilder("SQUAREBRACKETCLOSE_TK");
+            }
+        } else if (compareToken("IDENTIFIER_TK")) {
+            getNextToken(); //consume identifier
+        } else if (compareToken("NUMBER_TK")) {
+            getNextToken(); //consume number
+        } else {
+            throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
+        }
     }
 
     private void nontermStats() throws Exception {
