@@ -94,8 +94,6 @@ public class Parser {
             } else {
                 throw exceptionBuilder("IDENTIFIER_TK");
             }
-        } else {
-            return;
         }
     }
 
@@ -135,7 +133,6 @@ public class Parser {
             throw exceptionBuilder("SEMICOLON_TK");
         }
         nontermMStat();
-        return;
     }
 
     private void nontermMStat() throws Exception {
@@ -152,7 +149,6 @@ public class Parser {
             }
             nontermMStat();
         }
-        return;
     }
 
     private void nontermStat() throws Exception {
@@ -175,19 +171,91 @@ public class Parser {
     }
 
     private void nontermIn() throws Exception {
-        return;
+        if (compareToken("IN_TK")) {
+            getNextToken(); //consume intk
+            if (compareToken("IDENTIFIER_TK")) {
+                getNextToken(); //consume identifier tk
+            } else {
+                throw exceptionBuilder("IDENTIFIER_TK");
+            }
+        } else {
+            throw exceptionBuilder("IN_TK");
+        }
+
     }
 
     private void nontermOut() throws Exception {
-        return;
+        if (compareToken("OUT_TK")) {
+            getNextToken(); //consume outtk
+            nontermExpr();
+        } else {
+            throw exceptionBuilder("OUT_TK");
+        }
+
     }
 
     private void nontermIf() throws Exception {
-        return;
+        if (compareToken("COND_TK")) {
+            getNextToken(); //consume cond
+            if (compareToken("PARENTHESISOPEN_TK")) {
+                getNextToken(); //consme (
+                if (compareToken("PARENTHESISOPEN_TK")) {
+                    getNextToken(); //consume (
+                    nontermExpr();
+                    nontermRO();
+                    nontermExpr();
+                    if (compareToken("PARENTHESISCLOSE_TK")) {
+                        getNextToken(); //consume )
+                        if (compareToken("PARENTHESISCLOSE_TK")) {
+                            getNextToken(); //consume )
+                            nontermStat();
+                        } else {
+                            throw exceptionBuilder("PARENTHESISCLOSE_TK");
+                        }
+                    } else {
+                        throw exceptionBuilder("PARENTHESISCLOSE_TK");
+                    }
+                } else {
+                    throw exceptionBuilder("PARENTHESISOPEN_TK");
+                }
+            } else {
+                throw exceptionBuilder("PARENTHESISOPEN_TK");
+            }
+        } else {
+            throw exceptionBuilder("COND_TK");
+        }
     }
 
     private void nontermLoop() throws Exception {
-        return;
+        if (compareToken("ITERATE_TK")) {
+            getNextToken();
+            if (compareToken("PARENTHESISOPEN_TK")) {
+                getNextToken(); //consme (
+                if (compareToken("PARENTHESISOPEN_TK")) {
+                    getNextToken(); //consume (
+                    nontermExpr();
+                    nontermRO();
+                    nontermExpr();
+                    if (compareToken("PARENTHESISCLOSE_TK")) {
+                        getNextToken(); //consume )
+                        if (compareToken("PARENTHESISCLOSE_TK")) {
+                            getNextToken(); //consume )
+                            nontermStat();
+                        } else {
+                            throw exceptionBuilder("PARENTHESISCLOSE_TK");
+                        }
+                    } else {
+                        throw exceptionBuilder("PARENTHESISCLOSE_TK");
+                    }
+                } else {
+                    throw exceptionBuilder("PARENTHESISOPEN_TK");
+                }
+            } else {
+                throw exceptionBuilder("PARENTHESISOPEN_TK");
+            }
+        } else {
+            throw exceptionBuilder("ITERATE_TK");
+        }
     }
 
     private void nontermAssign() throws Exception {
@@ -210,15 +278,31 @@ public class Parser {
     }
 
     private void nontermRO() throws Exception {
-        return;
+        if (compareToken("LESSTHAN_TK")) {
+            getNextToken();
+            nontermROFactorLT();
+        } else if (compareToken("GREATERTHAN_TK")) {
+            getNextToken();
+            nontermVaROFactorGT();
+        } else if (compareToken("ASSIGN_TK")) {
+            getNextToken();
+        } else {
+            throw exceptionBuilder("LESSTHAN_TK OR GREATERTHAN_TK OR ASSIGN_TK");
+        }
     }
 
     private void nontermVaROFactorGT() throws Exception {
-        return;
+        if (compareToken("GREATERTHAN_TK")) {
+            getNextToken();
+        }
     }
 
     private void nontermROFactorLT() throws Exception {
-        return;
+        if (compareToken("GREATERTHAN_TK")) {
+            getNextToken();
+        } else if (compareToken("LESSTHAN_TK")) {
+            getNextToken();
+        }
     }
 
 
