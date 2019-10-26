@@ -18,7 +18,7 @@ public class Parser {
         lastTk = null;
     }
 
-    public Exception exceptionBuilder(String expectedTk) {
+    private Exception exceptionBuilder(String expectedTk) {
         StringBuilder exceptionString = new StringBuilder();
         exceptionString
                 .append("PROGPARSER:L")
@@ -126,13 +126,22 @@ public class Parser {
     }
 
     private void nontermStats() throws Exception {
-        nontermStat();
-        if (compareToken("SEMICOLON_TK")) {
-            getNextToken();
+        if (compareToken("IN_TK") ||
+                compareToken("OUT_TK") ||
+                compareToken("START_TK") ||
+                compareToken("COND_TK") ||
+                compareToken("ITERATE_TK") ||
+                compareToken("IDENTIFIER_TK")) {
+            nontermStat();
+            if (compareToken("SEMICOLON_TK")) {
+                getNextToken();
+            } else {
+                throw exceptionBuilder("SEMICOLON_TK");
+            }
+            nontermMStat();
         } else {
-            throw exceptionBuilder("SEMICOLON_TK");
+            throw exceptionBuilder("IN_TK OR OUT_TK OR OR START_TK OR COND_TK OR ITERATE_TK OR IDENTIFIER_TK");
         }
-        nontermMStat();
     }
 
     private void nontermMStat() throws Exception {
