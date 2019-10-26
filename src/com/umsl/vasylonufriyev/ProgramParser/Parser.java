@@ -40,7 +40,7 @@ public class Parser {
     }
 
     public Tree beginParse() throws Exception {
-        getNextToken();
+        getNextToken(); //get first token
         nontermProgram();
 
         if (compareToken("EOF_TK"))
@@ -56,11 +56,11 @@ public class Parser {
 
     private void nontermBlock() throws Exception {
         if (compareToken("START_TK")) {
-            getNextToken();
+            getNextToken(); //consume startk
             nontermVars();
             nontermStats();
             if (compareToken("STOP_TK")) {
-                getNextToken();
+                getNextToken(); //consume stoptk
             } else {
                 throw exceptionBuilder("STOP_TK");
             }
@@ -73,7 +73,7 @@ public class Parser {
         return;
     }
 
-    private void nontermStats() {
+    private void nontermStats() throws Exception {
         return;
     }
 
