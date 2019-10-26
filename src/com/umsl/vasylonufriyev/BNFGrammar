@@ -1,6 +1,6 @@
 OK <program>  ->     <vars> <block>
 First:
-First(<vars> <block>) = First(<vars>) = { var, start, empty }
+First(<vars> <block>) = First(<vars>) + First(<block>) = { var, start, empty }
 ----------------------------------------------------------------------
 OK <block>    ->     start <vars> <stats> stop
 First:
