@@ -1,5 +1,6 @@
 package com.umsl.vasylonufriyev.ProgramParser;
 
+import com.umsl.vasylonufriyev.DataStructures.ProgramNode;
 import com.umsl.vasylonufriyev.DataStructures.Token;
 import com.umsl.vasylonufriyev.DataStructures.Tree;
 import com.umsl.vasylonufriyev.TokenScanner.ProgramDataBuffer;
@@ -8,13 +9,11 @@ import com.umsl.vasylonufriyev.TokenScanner.Scanner;
 public class Parser {
     private ProgramDataBuffer programSource;
     private Scanner scanner;
-    private Tree programTree;
     private Token lastTk;
 
     public Parser(ProgramDataBuffer programDataBuffer) {
         this.programSource = programDataBuffer;
         this.scanner = new Scanner();
-        this.programTree = new Tree();
         lastTk = null;
     }
 
@@ -39,32 +38,36 @@ public class Parser {
         return lastTk.getTokenType().equals(expected);
     }
 
-    public Tree beginParse() throws Exception {
+    public ProgramNode beginParse() throws Exception {
         getNextToken(); //get first token
-        nontermProgram();
+        ProgramNode root = nontermProgram();
 
         if (compareToken("EOF_TK"))
-            return programTree;
+            return root;
         else
             throw exceptionBuilder("EOF_TK");
     }
 
-    private void nontermProgram() throws Exception {
+    private ProgramNode nontermProgram() throws Exception {
+        ProgramNode node = new ProgramNode("<Program>");
         if (compareToken("VAR_TK") || compareToken("START_TK")) {
-            nontermVars();
-            nontermBlock();
+            node.children[0] = nontermVars();
+            node.children[1] = nontermBlock();
+            return node;
         } else {
             throw exceptionBuilder("VAR_TK OR START_TK");
         }
     }
 
-    private void nontermBlock() throws Exception {
+    private ProgramNode nontermBlock() throws Exception {
+        ProgramNode node = new ProgramNode("<Block>");
         if (compareToken("START_TK")) {
             getNextToken(); //consume startk
-            nontermVars();
-            nontermStats();
+            node.children[0] = nontermVars();
+            node.children[1] = nontermStats();
             if (compareToken("STOP_TK")) {
                 getNextToken(); //consume stoptk
+                return node;
             } else {
                 throw exceptionBuilder("STOP_TK");
             }
@@ -73,18 +76,18 @@ public class Parser {
         }
     }
 
-    private void nontermVars() throws Exception {
+    private ProgramNode nontermVars() throws Exception {
+        ProgramNode node = new ProgramNode("<Vars>");
         if (compareToken("VAR_TK")) {
             getNextToken(); //consume vartk
             if (compareToken("IDENTIFIER_TK")) {
                 getNextToken(); //consume identifiertk
-
                 if (compareToken("COLON_TK")) {
                     getNextToken(); //consume colontk
-
                     if (compareToken("NUMBER_TK")) {
                         getNextToken(); //consume numbertk
-                        nontermVars();
+                        node.children[0] = nontermVars();
+                        return node;
                     } else {
                         throw exceptionBuilder("NUMBER_TK");
                     }
@@ -95,125 +98,150 @@ public class Parser {
                 throw exceptionBuilder("IDENTIFIER_TK");
             }
         }
+        return null;
     }
 
-    private void nontermExpr() throws Exception { //FLAGGED
+    private ProgramNode nontermExpr() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<Expr>");
         if (compareToken("MINUS_TK") ||
                 compareToken("SQUAREBRACKETOPEN_TK") ||
                 compareToken("IDENTIFIER_TK") ||
                 compareToken("NUMBER_TK")) {
-            nontermA();
-            nontermExprFactor();
+            node.children[0] = nontermA();
+            node.children[1] = nontermExprFactor();
+            return node;
         } else {
             throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
         }
     }
 
-    private void nontermExprFactor() throws Exception { //FLAGGED
+    private ProgramNode nontermExprFactor() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<ExprFactor>");
         if (compareToken("PLUS_TK")) {
             getNextToken(); //consume +
-            nontermExpr();
+            node.children[0] = nontermExpr();
+            return node;
         } else if (compareToken("MINUS_TK")) {
             getNextToken(); //consume -
-            nontermExpr();
+            node.children[0] = nontermExpr();
+            return node;
         }
-        return;
+        return null;
     }
 
-    private void nontermA() throws Exception { //FLAGGED
+    private ProgramNode nontermA() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<A>");
         if (compareToken("MINUS_TK") ||
                 compareToken("SQUAREBRACKETOPEN_TK") ||
                 compareToken("IDENTIFIER_TK") ||
                 compareToken("NUMBER_TK")) {
-            nontermN();
-            nontermAFactor();
+            node.children[0] = nontermN();
+            node.children[1] = nontermAFactor();
+            return node;
         } else {
             throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
         }
     }
 
-    private void nontermAFactor() throws Exception { //FLAGGED
+    private ProgramNode nontermAFactor() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<AFactor>");
         if (compareToken("MINUS_TK")) {
             getNextToken();
-            nontermA();
+            node.children[0] = nontermA();
+            return node;
         }
-        return;
+        return null;
     }
 
-    private void nontermN() throws Exception { //FLAGGED
+    private ProgramNode nontermN() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<N>");
         if (compareToken("MINUS_TK") ||
                 compareToken("SQUAREBRACKETOPEN_TK") ||
                 compareToken("IDENTIFIER_TK") ||
                 compareToken("NUMBER_TK")) {
-            nontermM();
-            nontermNFactor();
+            node.children[0] = nontermM();
+            node.children[1] = nontermNFactor();
+            return node;
         } else {
             throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
         }
     }
 
-    private void nontermNFactor() throws Exception { //FLAGGED
+    private ProgramNode nontermNFactor() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<NFactor>");
         if (compareToken("DIVIDE_TK")) {
             getNextToken(); //consume /
-            nontermN();
+            node.children[0] = nontermN();
+            return node;
         } else if (compareToken("MULT_TK")) {
             getNextToken(); //consume *
-            nontermN();
+            node.children[0] = nontermN();
+            return node;
         }
-        return;
+        return null;
     }
 
-    private void nontermM() throws Exception { //FLAGGED
+    private ProgramNode nontermM() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<M>");
         if (compareToken("SQUAREBRACKETOPEN_TK") ||
                 compareToken("IDENTIFIER_TK") ||
                 compareToken("NUMBER_TK")) {
-            nontermR();
+            node.children[0] = nontermR();
+            return node;
         } else if (compareToken("MINUS_TK")) {
             getNextToken();
-            nontermM();
+            node.children[0] = nontermM();
+            return node;
         } else {
             throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
         }
     }
 
-    private void nontermR() throws Exception { //FLAGGED
+    private ProgramNode nontermR() throws Exception { //FLAGGED
+        ProgramNode node = new ProgramNode("<R>");
         if (compareToken("SQUAREBRACKETOPEN_TK")) {
             getNextToken(); //consume [
-            nontermExpr();
+            node.children[0] = nontermExpr();
             if (compareToken("SQUAREBRACKETCLOSE_TK")) {
                 getNextToken(); //consume ]
+                return node;
             } else {
                 throw exceptionBuilder("SQUAREBRACKETCLOSE_TK");
             }
         } else if (compareToken("IDENTIFIER_TK")) {
             getNextToken(); //consume identifier
+            return node;
         } else if (compareToken("NUMBER_TK")) {
             getNextToken(); //consume number
+            return node;
         } else {
             throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
         }
     }
 
-    private void nontermStats() throws Exception {
+    private ProgramNode nontermStats() throws Exception {
+        ProgramNode node = new ProgramNode("<Stats>");
         if (compareToken("IN_TK") ||
                 compareToken("OUT_TK") ||
                 compareToken("START_TK") ||
                 compareToken("COND_TK") ||
                 compareToken("ITERATE_TK") ||
                 compareToken("IDENTIFIER_TK")) {
-            nontermStat();
+            node.children[0] = nontermStat();
             if (compareToken("SEMICOLON_TK")) {
                 getNextToken();
             } else {
                 throw exceptionBuilder("SEMICOLON_TK");
             }
-            nontermMStat();
+            node.children[1] = nontermMStat();
+            return node;
         } else {
             throw exceptionBuilder("IN_TK OR OUT_TK OR OR START_TK OR COND_TK OR ITERATE_TK OR IDENTIFIER_TK");
         }
     }
 
-    private void nontermMStat() throws Exception {
+    private ProgramNode nontermMStat() throws Exception {
+        ProgramNode node = new ProgramNode("<MStat>");
         //in, out, start, cond, iterate, Identifier
         if (compareToken("IN_TK") ||
                 compareToken("OUT_TK") ||
@@ -221,73 +249,85 @@ public class Parser {
                 compareToken("COND_TK") ||
                 compareToken("ITERATE_TK") ||
                 compareToken("IDENTIFIER_TK")) {
-            nontermStat();
+            node.children[0] = nontermStat();
             if (compareToken("SEMICOLON_TK")) {
                 getNextToken();
             }
-            nontermMStat();
+            node.children[1] = nontermMStat();
+            return node;
         }
-        return;
+        return null;
     }
 
-    private void nontermStat() throws Exception {
+    private ProgramNode nontermStat() throws Exception {
+        ProgramNode node = new ProgramNode("<Stat>");
         if (compareToken("IN_TK")) {
-            nontermIn();
+            node.children[0] = nontermIn();
+            return node;
         } else if (compareToken("OUT_TK")) {
-            nontermOut();
+            node.children[0] = nontermOut();
+            return node;
         } else if (compareToken("START_TK")) {
-            nontermBlock();
+            node.children[0] = nontermBlock();
+            return node;
         } else if (compareToken("COND_TK")) {
-            nontermIf();
+            node.children[0] = nontermIf();
+            return node;
         } else if (compareToken("ITERATE_TK")) {
-            nontermLoop();
+            node.children[0] = nontermLoop();
+            return node;
         } else if (compareToken("IDENTIFIER_TK")) {
-            nontermAssign();
+            node.children[0] = nontermAssign();
+            return node;
         } else {
             throw exceptionBuilder("IN_TK, OR OUT_TK OR START_TK OR COND_TK OR ITERATE_TK OR IDENTIFIER_TK");
         }
-
     }
 
-    private void nontermIn() throws Exception {
+    private ProgramNode nontermIn() throws Exception {
+        ProgramNode node = new ProgramNode("<In>");
         if (compareToken("IN_TK")) {
             getNextToken(); //consume intk
             if (compareToken("IDENTIFIER_TK")) {
                 getNextToken(); //consume identifier tk
+                return node;
             } else {
                 throw exceptionBuilder("IDENTIFIER_TK");
             }
         } else {
             throw exceptionBuilder("IN_TK");
         }
-
     }
 
-    private void nontermOut() throws Exception {
+    private ProgramNode nontermOut() throws Exception {
+        ProgramNode node = new ProgramNode("<Out>");
         if (compareToken("OUT_TK")) {
             getNextToken(); //consume outtk
-            nontermExpr();
+            node.children[0] = nontermExpr();
+            return node;
         } else {
             throw exceptionBuilder("OUT_TK");
         }
 
     }
 
-    private void nontermIf() throws Exception {
+    private ProgramNode nontermIf() throws Exception {
+        ProgramNode node = new ProgramNode("<If>");
         if (compareToken("COND_TK")) {
             getNextToken(); //consume cond
             if (compareToken("PARENTHESISOPEN_TK")) {
                 getNextToken(); //consme (
                 if (compareToken("PARENTHESISOPEN_TK")) {
                     getNextToken(); //consume (
-                    nontermExpr();
-                    nontermRO();
-                    nontermExpr();
+                    node.children[0] = nontermExpr();
+                    node.children[1] = nontermRO();
+                    node.children[2] = nontermExpr();
                     if (compareToken("PARENTHESISCLOSE_TK")) {
                         getNextToken(); //consume )
                         if (compareToken("PARENTHESISCLOSE_TK")) {
                             getNextToken(); //consume )
-                            nontermStat();
+                            node.children[3] = nontermStat();
+                            return node;
                         } else {
                             throw exceptionBuilder("PARENTHESISCLOSE_TK");
                         }
@@ -305,21 +345,23 @@ public class Parser {
         }
     }
 
-    private void nontermLoop() throws Exception {
+    private ProgramNode nontermLoop() throws Exception {
+        ProgramNode node = new ProgramNode("<Loop>");
         if (compareToken("ITERATE_TK")) {
             getNextToken();
             if (compareToken("PARENTHESISOPEN_TK")) {
                 getNextToken(); //consme (
                 if (compareToken("PARENTHESISOPEN_TK")) {
                     getNextToken(); //consume (
-                    nontermExpr();
-                    nontermRO();
-                    nontermExpr();
+                    node.children[0] = nontermExpr();
+                    node.children[1] = nontermRO();
+                    node.children[2] = nontermExpr();
                     if (compareToken("PARENTHESISCLOSE_TK")) {
                         getNextToken(); //consume )
                         if (compareToken("PARENTHESISCLOSE_TK")) {
                             getNextToken(); //consume )
-                            nontermStat();
+                            node.children[3] = nontermStat();
+                            return node;
                         } else {
                             throw exceptionBuilder("PARENTHESISCLOSE_TK");
                         }
@@ -337,14 +379,16 @@ public class Parser {
         }
     }
 
-    private void nontermAssign() throws Exception {
+    private ProgramNode nontermAssign() throws Exception {
+        ProgramNode node = new ProgramNode("<Assign>");
         if (compareToken("IDENTIFIER_TK")) {
             getNextToken(); //consume identifier
             if (compareToken("LESSTHAN_TK")) {
                 getNextToken(); //consume less than
                 if (compareToken("LESSTHAN_TK")) {
                     getNextToken(); //consume less than
-                    nontermExpr();
+                    node.children[0] = nontermExpr();
+                    return node;
                 } else {
                     throw exceptionBuilder("LESSTHAN_TK");
                 }
@@ -356,35 +400,43 @@ public class Parser {
         }
     }
 
-    private void nontermRO() throws Exception {
+    private ProgramNode nontermRO() throws Exception {
+        ProgramNode node = new ProgramNode("<RO>");
         if (compareToken("LESSTHAN_TK")) {
             getNextToken();
-            nontermROFactorLT();
+            node.children[0] = nontermROFactorLT();
+            return node;
         } else if (compareToken("GREATERTHAN_TK")) {
             getNextToken();
-            nontermVaROFactorGT();
+            node.children[0] = nontermVaROFactorGT();
+            return node;
         } else if (compareToken("ASSIGN_TK")) {
             getNextToken();
+            return node;
         } else {
             throw exceptionBuilder("LESSTHAN_TK OR GREATERTHAN_TK OR ASSIGN_TK");
         }
     }
 
-    private void nontermVaROFactorGT() throws Exception {
+    private ProgramNode nontermVaROFactorGT() throws Exception {
+        ProgramNode node = new ProgramNode("<ROFactorGT>");
         if (compareToken("GREATERTHAN_TK")) {
             getNextToken();
+            return node;
         }
-        return;
+        return null;
     }
 
-    private void nontermROFactorLT() throws Exception {
+    private ProgramNode nontermROFactorLT() throws Exception {
+        ProgramNode node = new ProgramNode("<ROFactorLT>");
         if (compareToken("GREATERTHAN_TK")) {
             getNextToken();
+            return node;
+
         } else if (compareToken("LESSTHAN_TK")) {
             getNextToken();
+            return node;
         }
-        return;
+        return null;
     }
-
-
 }

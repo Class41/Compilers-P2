@@ -8,6 +8,7 @@ Description: Initial point of the program--contains the main function and comman
 
 package com.umsl.vasylonufriyev;
 
+import com.umsl.vasylonufriyev.DataStructures.ProgramNode;
 import com.umsl.vasylonufriyev.DataStructures.Tree;
 import com.umsl.vasylonufriyev.DatasourceParser.ParseCMD;
 import com.umsl.vasylonufriyev.DatasourceParser.ParseFile;
@@ -30,7 +31,7 @@ public class Main {
         Parser parser = new Parser(new ProgramDataBuffer(parsedData));
 
         try {
-            Tree parseResult = parser.beginParse();
+            ProgramNode parseResult = parser.beginParse();
             System.out.println("SUCCESSFULLY PARSED");
         } catch (Exception e) {
             e.printStackTrace();
