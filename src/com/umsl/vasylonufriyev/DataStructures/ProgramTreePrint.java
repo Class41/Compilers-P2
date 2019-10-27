@@ -12,7 +12,10 @@ public class ProgramTreePrint {
 
     private static void printMe(ProgramNode node, int depth) {
         StringBuilder sb = new StringBuilder();
-        sb.append("  ".repeat(Math.max(0, depth)));
+        if (depth > 0) {
+            sb.append("|  ".repeat(Math.max(0, depth)));
+            //sb.append("| ");
+        }
         sb.append(node.nodeLabel);
         sb.append(" (");
 
