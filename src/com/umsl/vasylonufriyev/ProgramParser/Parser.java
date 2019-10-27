@@ -120,10 +120,12 @@ public class Parser {
     private ProgramNode nontermExprFactor() throws Exception { //FLAGGED
         ProgramNode node = new ProgramNode("<ExprFactor>");
         if (compareToken("PLUS_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume +
             node.children[0] = nontermExpr();
             return node;
         } else if (compareToken("MINUS_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume -
             node.children[0] = nontermExpr();
             return node;
@@ -148,6 +150,7 @@ public class Parser {
     private ProgramNode nontermAFactor() throws Exception { //FLAGGED
         ProgramNode node = new ProgramNode("<AFactor>");
         if (compareToken("MINUS_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             node.children[0] = nontermA();
             return node;
@@ -172,10 +175,12 @@ public class Parser {
     private ProgramNode nontermNFactor() throws Exception { //FLAGGED
         ProgramNode node = new ProgramNode("<NFactor>");
         if (compareToken("DIVIDE_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume /
             node.children[0] = nontermN();
             return node;
         } else if (compareToken("MULT_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume *
             node.children[0] = nontermN();
             return node;
@@ -409,14 +414,17 @@ public class Parser {
     private ProgramNode nontermRO() throws Exception {
         ProgramNode node = new ProgramNode("<RO>");
         if (compareToken("LESSTHAN_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             node.children[0] = nontermROFactorLT();
             return node;
         } else if (compareToken("GREATERTHAN_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             node.children[0] = nontermVaROFactorGT();
             return node;
         } else if (compareToken("ASSIGN_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             return node;
         } else {
@@ -427,6 +435,7 @@ public class Parser {
     private ProgramNode nontermVaROFactorGT() throws Exception {
         ProgramNode node = new ProgramNode("<ROFactorGT>");
         if (compareToken("GREATERTHAN_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             return node;
         }
@@ -436,10 +445,12 @@ public class Parser {
     private ProgramNode nontermROFactorLT() throws Exception {
         ProgramNode node = new ProgramNode("<ROFactorLT>");
         if (compareToken("GREATERTHAN_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             return node;
 
         } else if (compareToken("LESSTHAN_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             return node;
         }
