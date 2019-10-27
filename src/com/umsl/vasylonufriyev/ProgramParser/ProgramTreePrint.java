@@ -16,8 +16,8 @@ public class ProgramTreePrint {
     private static void printMe(ProgramNode node, int depth) {
         StringBuilder sb = new StringBuilder();
         if (depth > 0) {
-            sb.append("|  ".repeat(Math.max(0, depth)));
-            //sb.append("| ");
+            for(int i = 0; i < depth; i++)
+            sb.append("| ");
         }
         sb.append(node.getNodeLabel());
         sb.append(" (");
