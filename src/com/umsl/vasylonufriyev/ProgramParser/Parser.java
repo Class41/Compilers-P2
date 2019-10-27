@@ -2,7 +2,6 @@ package com.umsl.vasylonufriyev.ProgramParser;
 
 import com.umsl.vasylonufriyev.DataStructures.ProgramNode;
 import com.umsl.vasylonufriyev.DataStructures.Token;
-import com.umsl.vasylonufriyev.DataStructures.Tree;
 import com.umsl.vasylonufriyev.TokenScanner.ProgramDataBuffer;
 import com.umsl.vasylonufriyev.TokenScanner.Scanner;
 
@@ -395,8 +394,10 @@ public class Parser {
             node.tokenData[0] = lastTk;
             getNextToken(); //consume identifier
             if (compareToken("LESSTHAN_TK")) {
+                node.tokenData[1] = lastTk;
                 getNextToken(); //consume less than
                 if (compareToken("LESSTHAN_TK")) {
+                    node.tokenData[2] = lastTk;
                     getNextToken(); //consume less than
                     node.children[0] = nontermExpr();
                     return node;
