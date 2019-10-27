@@ -81,10 +81,12 @@ public class Parser {
         if (compareToken("VAR_TK")) {
             getNextToken(); //consume vartk
             if (compareToken("IDENTIFIER_TK")) {
+                node.tokenData[0] = lastTk;
                 getNextToken(); //consume identifiertk
                 if (compareToken("COLON_TK")) {
                     getNextToken(); //consume colontk
                     if (compareToken("NUMBER_TK")) {
+                        node.tokenData[1] = lastTk;
                         getNextToken(); //consume numbertk
                         node.children[0] = nontermVars();
                         return node;
@@ -209,9 +211,11 @@ public class Parser {
                 throw exceptionBuilder("SQUAREBRACKETCLOSE_TK");
             }
         } else if (compareToken("IDENTIFIER_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume identifier
             return node;
         } else if (compareToken("NUMBER_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume number
             return node;
         } else {
@@ -289,6 +293,7 @@ public class Parser {
         if (compareToken("IN_TK")) {
             getNextToken(); //consume intk
             if (compareToken("IDENTIFIER_TK")) {
+                node.tokenData[0] = lastTk;
                 getNextToken(); //consume identifier tk
                 return node;
             } else {
@@ -382,6 +387,7 @@ public class Parser {
     private ProgramNode nontermAssign() throws Exception {
         ProgramNode node = new ProgramNode("<Assign>");
         if (compareToken("IDENTIFIER_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken(); //consume identifier
             if (compareToken("LESSTHAN_TK")) {
                 getNextToken(); //consume less than
