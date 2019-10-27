@@ -13,65 +13,65 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Tree {
-    private Node root; //reference to root node
+public class BinaryTree {
+    private BinaryNode root; //reference to root node
 
-    public Tree() {
+    public BinaryTree() {
         root = null;
     }
 
-    private void printPostorder(Node node, int depth, FileWriter fs) throws IOException {
-        if (node == null)
+    private void printPostorder(BinaryNode binaryNode, int depth, FileWriter fs) throws IOException {
+        if (binaryNode == null)
             return;
 
-        printPostorder(node.left, depth + 1, fs);
-        printPostorder(node.right, depth + 1, fs);
+        printPostorder(binaryNode.left, depth + 1, fs);
+        printPostorder(binaryNode.right, depth + 1, fs);
         for (int i = 0; i < (depth * 2); i++)
             fs.write(" ");
 
-        fs.write(node.key + " ");
+        fs.write(binaryNode.key + " ");
 
-        for (Object s : node.values) {
+        for (Object s : binaryNode.values) {
             fs.write(s + " ");
         }
 
         fs.write("\n");
     }
 
-    private void printInorder(Node node, int depth, FileWriter fs) throws IOException {
-        if (node == null)
+    private void printInorder(BinaryNode binaryNode, int depth, FileWriter fs) throws IOException {
+        if (binaryNode == null)
             return;
 
-        printInorder(node.left, depth + 1, fs);
+        printInorder(binaryNode.left, depth + 1, fs);
         for (int i = 0; i < (depth * 2); i++)
             fs.write(" ");
 
-        fs.write(node.key + " ");
+        fs.write(binaryNode.key + " ");
 
-        for (Object s : node.values) {
+        for (Object s : binaryNode.values) {
             fs.write(s + " ");
         }
 
         fs.write("\n");
-        printInorder(node.right, depth + 1, fs);
+        printInorder(binaryNode.right, depth + 1, fs);
     }
 
-    private void printPreorder(Node node, int depth, FileWriter fs) throws IOException {
-        if (node == null)
+    private void printPreorder(BinaryNode binaryNode, int depth, FileWriter fs) throws IOException {
+        if (binaryNode == null)
             return;
 
         for (int i = 0; i < (depth * 2); i++)
             fs.write(" ");
 
-        fs.write(node.key + " ");
+        fs.write(binaryNode.key + " ");
 
-        for (Object s : node.values) {
+        for (Object s : binaryNode.values) {
             fs.write(s + " ");
         }
 
         fs.write("\n");
-        printPreorder(node.left, depth + 1, fs);
-        printPreorder(node.right, depth + 1, fs);
+        printPreorder(binaryNode.left, depth + 1, fs);
+        printPreorder(binaryNode.right, depth + 1, fs);
 
     }
 
@@ -111,7 +111,7 @@ public class Tree {
         }
     }
 
-    public Tree buildTree(String[] dataSet) {
+    public BinaryTree buildTree(String[] dataSet) {
         for (String s : dataSet)
             insertNode(s);
 
@@ -122,27 +122,27 @@ public class Tree {
         char key = s.charAt(0); //check first character of string, this is our key
 
         if (root == null) { //if there is not root, this is now our root
-            root = new Node<String>(key, s);
+            root = new BinaryNode<String>(key, s);
         } else { //otherwise
-            Node currentNode = root; //set the current node visited equal to root
+            BinaryNode currentBinaryNode = root; //set the current node visited equal to root
             boolean placed = false; //keeps track if we have placed the item
 
             while (!placed) {
-                if (key == currentNode.key) { //check if the key matches current node
-                    currentNode.addValueToValues(s);
+                if (key == currentBinaryNode.key) { //check if the key matches current node
+                    currentBinaryNode.addValueToValues(s);
                     placed = true;
-                } else if (key > currentNode.key) { //check if current key greater than node key
-                    if (currentNode.right != null) {
-                        currentNode = currentNode.right;
+                } else if (key > currentBinaryNode.key) { //check if current key greater than node key
+                    if (currentBinaryNode.right != null) {
+                        currentBinaryNode = currentBinaryNode.right;
                     } else {
-                        currentNode.right = new Node<String>(key, s);
+                        currentBinaryNode.right = new BinaryNode<String>(key, s);
                         placed = true;
                     }
                 } else { //if key is less than node key
-                    if (currentNode.left != null) {
-                        currentNode = currentNode.left;
+                    if (currentBinaryNode.left != null) {
+                        currentBinaryNode = currentBinaryNode.left;
                     } else {
-                        currentNode.left = new Node<String>(key, s);
+                        currentBinaryNode.left = new BinaryNode<String>(key, s);
                         placed = true;
                     }
                 }

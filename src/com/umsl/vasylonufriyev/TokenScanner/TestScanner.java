@@ -3,11 +3,12 @@ Author: Vasyl Onufriyev
 Date: 10.1.19
 Class: CS4280
 Instructor: Professor Janikow
-Description: Temporarily drives the scanner until the next project
+Description: Temporarily drives the scanner until the next project. OBSOLETE
 */
 
 package com.umsl.vasylonufriyev.TokenScanner;
 
+@Deprecated
 class TestScanner {
     public TestScanner(String[] parsedData) { //Drives the scanner until EOF
         ProgramDataBuffer t = new ProgramDataBuffer(parsedData); //Data buffer contains filtered file data

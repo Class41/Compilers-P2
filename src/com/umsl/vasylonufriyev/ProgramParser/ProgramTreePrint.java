@@ -1,4 +1,7 @@
-package com.umsl.vasylonufriyev.DataStructures;
+package com.umsl.vasylonufriyev.ProgramParser;
+
+import com.umsl.vasylonufriyev.DataStructures.ProgramNode;
+import com.umsl.vasylonufriyev.DataStructures.Token;
 
 public class ProgramTreePrint {
     public static void treePrintPreorder(ProgramNode node, int depth) {
@@ -16,7 +19,7 @@ public class ProgramTreePrint {
             sb.append("|  ".repeat(Math.max(0, depth)));
             //sb.append("| ");
         }
-        sb.append(node.nodeLabel);
+        sb.append(node.getNodeLabel());
         sb.append(" (");
 
         for (Token t : node.tokenData) {

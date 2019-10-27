@@ -1,3 +1,11 @@
+/*
+Author: Vasyl Onufriyev
+Date: 10.27.2019
+Class: CS4280
+Instructor: Professor Janikow
+Description: Parses tokens from scanner using system stack, outputs a tree using ProgramNode objects.
+*/
+
 package com.umsl.vasylonufriyev.ProgramParser;
 
 import com.umsl.vasylonufriyev.DataStructures.ProgramNode;
@@ -6,17 +14,17 @@ import com.umsl.vasylonufriyev.TokenScanner.ProgramDataBuffer;
 import com.umsl.vasylonufriyev.TokenScanner.Scanner;
 
 public class Parser {
-    private ProgramDataBuffer programSource;
-    private Scanner scanner;
-    private Token lastTk;
+    private ProgramDataBuffer programSource; //Source of the program to be fed into the scanner
+    private Scanner scanner; //Scanner reference
+    private Token lastTk; //Keeps track of the last toke obtained from scanner
 
-    public Parser(ProgramDataBuffer programDataBuffer) {
+    public Parser(ProgramDataBuffer programDataBuffer) { //dependency injection
         this.programSource = programDataBuffer;
         this.scanner = new Scanner();
         lastTk = null;
     }
 
-    private Exception exceptionBuilder(String expectedTk) {
+    private Exception exceptionBuilder(String expectedTk) { //Builds exception strings for unexpected input from scanner
         StringBuilder exceptionString = new StringBuilder();
         exceptionString
                 .append("PROGPARSER:L")
@@ -29,15 +37,15 @@ public class Parser {
         return new Exception(exceptionString.toString());
     }
 
-    private void getNextToken() throws Exception {
+    private void getNextToken() throws Exception { //Gets next token from scanner and sets to lastTk
         lastTk = (scanner.scannerDriver(programSource)).getParsedTk();
     }
 
-    private boolean compareToken(String expected) {
+    private boolean compareToken(String expected) { //Compares token to given
         return lastTk.getTokenType().equals(expected);
     }
 
-    public ProgramNode beginParse() throws Exception {
+    public ProgramNode beginParse() throws Exception { //Starts parsing the program, entry point for parser
         getNextToken(); //get first token
         ProgramNode root = nontermProgram();
 
