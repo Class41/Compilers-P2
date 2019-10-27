@@ -117,6 +117,7 @@ public class Parser {
             getNextToken(); //consume -
             nontermExpr();
         }
+        return;
     }
 
     private void nontermA() throws Exception { //FLAGGED
@@ -136,6 +137,7 @@ public class Parser {
             getNextToken();
             nontermA();
         }
+        return;
     }
 
     private void nontermN() throws Exception { //FLAGGED
@@ -158,6 +160,7 @@ public class Parser {
             getNextToken(); //consume *
             nontermN();
         }
+        return;
     }
 
     private void nontermM() throws Exception { //FLAGGED
@@ -224,6 +227,7 @@ public class Parser {
             }
             nontermMStat();
         }
+        return;
     }
 
     private void nontermStat() throws Exception {
@@ -370,6 +374,7 @@ public class Parser {
         if (compareToken("GREATERTHAN_TK")) {
             getNextToken();
         }
+        return;
     }
 
     private void nontermROFactorLT() throws Exception {
@@ -378,6 +383,7 @@ public class Parser {
         } else if (compareToken("LESSTHAN_TK")) {
             getNextToken();
         }
+        return;
     }
 
 
