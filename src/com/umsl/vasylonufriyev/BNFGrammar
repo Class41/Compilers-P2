@@ -36,26 +36,11 @@ Follow(<expr>) =
 { <, >, = } + Follow(<stat>) =
 { ; } =
 { ], ), <, >, =, ; }
-----------------------------------------------------------------------
-OK <A>        ->     <N> <Afactor>
-First:
-First(<N> <Afactor>) = First(<N>) = { -, [, Identifier, Integer }
-----------------------------------------------------------------------
-OK <Afactor>  -> - <A> | empty
-First:
-First(- <A>) = { - }
-First(empty) = { empty }
 
-Follow:
-Follow(<Afactor>) =
-Follow(<A>) =
-First(<exprfactor>) =
-{ +, - } + Follow(<exprfactor>) =
-Follow(<expr>) =
-{ ], ) } + First(RO) + Follow(<out>) + Follow(<assign>) =
-{ <, >, = } + Follow(<stat>) =
-{ ; } =
-{ +, -, ], ), <, >, =, ; }
+----------------------------------------------------------------------
+OK <A>        ->     <N> - <A> | <N>
+First:
+First(<N>) = { -, [, Identifier, Integer } (Will use the programing technique to combat the dual set)
 ----------------------------------------------------------------------
 OK <N>        ->     <M> <Nfactor>
 First:
@@ -69,16 +54,13 @@ First(empty) = { empty }
 Follow:
 Follow(<Nfactor>) =
 Follow(<N>) =
-First(<Afactor>) =
-{ - } + Follow(<Afactor>) =
-Follow(<A>) =
-First(<exprfactor>) =
-{ +, - } + Follow(<exprfactor>) =
+{-} + Follow(<A>) =
+Follow(<exprfactor>) =
 Follow(<expr>) =
 { ], ) } + First(RO) + Follow(<out>) + Follow(<assign>) =
 { <, >, = } + Follow(<stat>) =
 { ; } =
-{ -, +, ], ), <, >, =, ; }
+{ -, ], ), <, >, =, ; }
 
 ----------------------------------------------------------------------
 OK <M>        ->     - <M> |  <R>
