@@ -256,7 +256,10 @@ public class Parser {
             node.children[0] = nontermStat();
             if (compareToken("SEMICOLON_TK")) {
                 getNextToken();
+            } else {
+                exceptionBuilder("SEMICOLON_TK");
             }
+
             node.children[1] = nontermMStat();
             return node;
         }
