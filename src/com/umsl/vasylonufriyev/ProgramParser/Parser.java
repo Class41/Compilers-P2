@@ -140,7 +140,7 @@ public class Parser {
         return null;
     }
 
-    private ProgramNode nontermA() throws Exception { //FLAGGED
+    private ProgramNode nontermA() throws Exception { //FLAGGED USING AMBIGUITY AVOIDANCE TECHNIQUE
         ProgramNode node = new ProgramNode("<A>");
         node.children[0] = nontermN();
         if (compareToken("MINUS_TK")) {
@@ -190,6 +190,7 @@ public class Parser {
             node.children[0] = nontermR();
             return node;
         } else if (compareToken("MINUS_TK")) {
+            node.tokenData[0] = lastTk;
             getNextToken();
             node.children[0] = nontermM();
             return node;
