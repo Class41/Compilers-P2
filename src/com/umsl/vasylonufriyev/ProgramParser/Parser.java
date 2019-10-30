@@ -142,27 +142,14 @@ public class Parser {
 
     private ProgramNode nontermA() throws Exception { //FLAGGED
         ProgramNode node = new ProgramNode("<A>");
-        if (compareToken("MINUS_TK") ||
-                compareToken("SQUAREBRACKETOPEN_TK") ||
-                compareToken("IDENTIFIER_TK") ||
-                compareToken("NUMBER_TK")) {
-            node.children[0] = nontermN();
-            node.children[1] = nontermAFactor();
-            return node;
-        } else {
-            throw exceptionBuilder("MINUS_TK OR SQUAREBRACKETOPEN_TK OR IDENTIFIER_TK OR NUMBER_TK");
-        }
-    }
-
-    private ProgramNode nontermAFactor() throws Exception { //FLAGGED
-        ProgramNode node = new ProgramNode("<AFactor>");
+        node.children[0] = nontermN();
         if (compareToken("MINUS_TK")) {
             node.tokenData[0] = lastTk;
-            getNextToken();
-            node.children[0] = nontermA();
+            getNextToken(); //Consume -
+            node.children[1] = nontermA();
             return node;
         }
-        return null;
+        return node;
     }
 
     private ProgramNode nontermN() throws Exception { //FLAGGED
