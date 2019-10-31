@@ -23,10 +23,9 @@ OK <expr>     ->     <A> <exprfactor>
 First:
 First(<A> <exprfactor>) = First(<A>) = { -, [, Identifier, Integer }
 ----------------------------------------------------------------------
-OK <exprfactor> -> + <expr> | - <expr> | empty
+OK <exprfactor> -> + <expr> | empty
 First:
 First(+ <expr>) = { + }
-First(- <expr>) = { - }
 First(empty) = { empty }
 
 Follow:

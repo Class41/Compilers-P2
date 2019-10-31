@@ -131,11 +131,6 @@ public class Parser {
             getNextToken(); //consume +
             node.children[0] = nontermExpr();
             return node;
-        } else if (compareToken("MINUS_TK")) {
-            node.tokenData[0] = lastTk;
-            getNextToken(); //consume -
-            node.children[0] = nontermExpr();
-            return node;
         }
         return null;
     }
