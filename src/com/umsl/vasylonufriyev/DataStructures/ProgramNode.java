@@ -9,7 +9,7 @@ Description: Program node. Used in generating a tree for traversal later.
 package com.umsl.vasylonufriyev.DataStructures;
 
 public class ProgramNode {
-    String nodeLabel;
+    private String nodeLabel;
     public ProgramNode[] children = new ProgramNode[4];
     public Token[] tokenData = new Token[4];
 
