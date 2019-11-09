@@ -35,7 +35,7 @@ public class Main {
             System.out.println("SUCCESSFULLY PARSED");
             ProgramTreePrint.treePrintPreorder(parseResult, 0);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             System.exit(-1);
         }
     }
